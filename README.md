@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เกมฉันเกิดมาจากใคร</title>
+  <title>เกมฉันเกิดมาจากใค����</title>
   <script src="/_sdk/data_sdk.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <style>
@@ -68,17 +68,15 @@
       transition: all 0.3s ease;
       border: 3px solid transparent;
       text-align: center;
-    }
-
-    .mode-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      opacity: 0.6;
+      pointer-events: none;
     }
 
     .mode-card.active {
       border-color: #667eea;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
+      opacity: 1;
     }
 
     .mode-title {
@@ -777,10 +775,10 @@
      <div class="mode-selection">
       <div class="mode-card" id="mode1Card" onclick="selectMode(1)">
        <div class="mode-title" id="mode1Title">
-        โหมด 1: หาต้นกำเนิดเกลือ
+        โหมด 1: หาต้นกำเนิดเ��ลือ
        </div>
        <div class="mode-description">
-        กำหนดเกลือให้ ลากกรดและเบสมาคู่กัน (10 ข้อ)
+        กำหนดเกลือให้ เลือกกรดและเบสมาคู่กัน (10 ข้อ)
        </div>
       </div>
       <div class="mode-card" id="mode2Card" onclick="selectMode(2)">
@@ -891,7 +889,7 @@
 
       { mode: 2, acid: 'HCl', base: 'NaOH', salt: 'NaCl', decoys: ['KCl', 'Na₂SO₄', 'NaBr', 'NaNO₃', 'K₂SO₄', 'MgCl₂'] },
       { mode: 2, acid: 'H₂SO₄', base: 'KOH', salt: 'K₂SO₄', decoys: ['KCl', 'Na₂SO₄', 'KNO₃', 'K₃PO₄', 'MgSO₄', 'CaSO₄'] },
-      { mode: 2, acid: 'HNO₃', base: 'Ca(OH)₂', salt: 'Ca(NO₃)₂', decoys: ['CaCl₂', 'CaSO₄', 'Mg(NO₃)₂', 'KNO₃', 'NaNO₃', 'CaCO₃'] },
+      { mode: 2, acid: 'HNO₃', base: 'Ca(OH)₂', salt: 'Ca(NO���)₂', decoys: ['CaCl₂', 'CaSO₄', 'Mg(NO₃)₂', 'KNO₃', 'NaNO₃', 'CaCO₃'] },
       { mode: 2, acid: 'HCl', base: 'Mg(OH)₂', salt: 'MgCl₂', decoys: ['MgSO₄', 'CaCl₂', 'NaCl', 'KCl', 'Mg(NO₃)₂', 'MgBr₂'] },
       { mode: 2, acid: 'H₂SO₄', base: 'NaOH', salt: 'Na₂SO₄', decoys: ['NaCl', 'K₂SO₄', 'Na₂CO₃', 'NaNO₃', 'MgSO₄', 'CaSO₄'] },
       { mode: 2, acid: 'HNO₃', base: 'KOH', salt: 'KNO₃', decoys: ['KCl', 'K₂SO₄', 'NaNO₃', 'Ca(NO₃)₂', 'KBr', 'K₃PO₄'] },
@@ -1076,17 +1074,6 @@
         document.getElementById('mode1Card').classList.add('active');
       } else {
         document.getElementById('mode2Card').classList.add('active');
-      }
-
-      document.getElementById('mode1Card').style.pointerEvents = 'none';
-      document.getElementById('mode2Card').style.pointerEvents = 'none';
-      document.getElementById('mode1Card').style.opacity = '0.6';
-      document.getElementById('mode2Card').style.opacity = '0.6';
-      
-      if (mode === 1) {
-        document.getElementById('mode1Card').style.opacity = '1';
-      } else {
-        document.getElementById('mode2Card').style.opacity = '1';
       }
 
       document.getElementById('gameArea').classList.remove('hidden');
@@ -1422,115 +1409,17 @@
         });
 
         if (!result.isOk) {
-          showInlineMessage('เกิดข้อผิดพลาดในการบันทึกคะแนน', 'error');
+          showInlineMessage('เกิดข้อผิดพลาดในการบั���ทึกคะแนน', 'error');
         }
       }
 
-      // รอข้อมูลอัพเดทจาก onDataChanged
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      const competitionSummary = generateCompetitionSummary();
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       document.getElementById('gameArea').innerHTML = `
         <div style="text-align: center; padding: 40px;">
           <h2 style="font-size: 32px; color: #667eea; margin-bottom: 20px;">🎉 เกมจบแล้ว!</h2>
           <p style="font-size: 24px; margin-bottom: 30px;">คะแนนของคุณ: <strong>${score}</strong> คะแนน</p>
-          ${competitionSummary}
           <button class="btn btn-primary" onclick="location.reload()">เล่นอีกครั้ง</button>
-        </div>
-      `;
-    }
-
-    function generateCompetitionSummary() {
-      const modeText = currentMode === 1 ? 'โหมด 1' : 'โหมด 2';
-      const sameModeScores = allScores.filter(s => s.mode === modeText);
-      
-      if (sameModeScores.length === 0) {
-        return '<p style="font-size: 16px; color: #666; margin-bottom: 20px;">คุณเป็นคนแรกที่เล่นโหมดนี้!</p>';
-      }
-
-      const sortedScores = [...sameModeScores].sort((a, b) => b.score - a.score);
-      
-      // หาอันดับของผู้เล่น - เช็คจากคะแนนและชื่อ
-      let playerRank = 0;
-      for (let i = 0; i < sortedScores.length; i++) {
-        if (sortedScores[i].player_name === playerName && sortedScores[i].score === score) {
-          playerRank = i + 1;
-          break;
-        }
-      }
-      
-      const totalPlayers = sortedScores.length;
-      const topScore = sortedScores[0].score;
-      const averageScore = Math.round(sortedScores.reduce((sum, s) => sum + s.score, 0) / totalPlayers);
-      
-      let rankEmoji = '🏅';
-      let rankColor = '#667eea';
-      let rankMessage = '';
-      
-      if (playerRank === 1) {
-        rankEmoji = '🥇';
-        rankColor = '#FFD700';
-        rankMessage = 'ยอดเยี่ยม! คุณได้อันดับ 1';
-      } else if (playerRank === 2) {
-        rankEmoji = '🥈';
-        rankColor = '#C0C0C0';
-        rankMessage = 'เยี่ยมมาก! คุณได้อันดับ 2';
-      } else if (playerRank === 3) {
-        rankEmoji = '🥉';
-        rankColor = '#CD7F32';
-        rankMessage = 'ดีมาก! คุณได้อันดับ 3';
-      } else if (playerRank <= 5) {
-        rankEmoji = '⭐';
-        rankColor = '#667eea';
-        rankMessage = `เก่งมาก! คุณอยู่ใน Top 5 (อันดับ ${playerRank})`;
-      } else if (playerRank > 0) {
-        rankEmoji = '🏅';
-        rankColor = '#666';
-        rankMessage = `คุณอยู่อันดับที่ ${playerRank} จาก ${totalPlayers} คน`;
-      } else {
-        rankEmoji = '🏅';
-        rankColor = '#666';
-        rankMessage = `มีผู้เล่น ${totalPlayers} คนในโหมดนี้`;
-      }
-
-      let comparisonText = '';
-      if (score > averageScore) {
-        const diff = score - averageScore;
-        comparisonText = `<p style="color: #28a745; font-size: 16px; margin: 10px 0;">📈 สูงกว่าค่าเฉลี่ย ${diff} คะแนน!</p>`;
-      } else if (score < averageScore) {
-        const diff = averageScore - score;
-        comparisonText = `<p style="color: #ff9800; font-size: 16px; margin: 10px 0;">📊 ต่ำกว่าค่าเฉลี่ย ${diff} คะแนน</p>`;
-      } else {
-        comparisonText = `<p style="color: #667eea; font-size: 16px; margin: 10px 0;">📊 ตรงกับค่าเฉลี่ยพอดี!</p>`;
-      }
-
-      return `
-        <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-          <h3 style="font-size: 24px; color: ${rankColor}; margin-bottom: 15px;">
-            ${rankEmoji} ${rankMessage}
-          </h3>
-          
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
-            <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <div style="font-size: 14px; color: #666; margin-bottom: 5px;">จำนวนผู้เล่น</div>
-              <div style="font-size: 24px; font-weight: bold; color: #667eea;">${totalPlayers}</div>
-            </div>
-            
-            <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <div style="font-size: 14px; color: #666; margin-bottom: 5px;">คะแนนสูงสุด</div>
-              <div style="font-size: 24px; font-weight: bold; color: #28a745;">${topScore}</div>
-            </div>
-            
-            <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <div style="font-size: 14px; color: #666; margin-bottom: 5px;">คะแนนเฉลี่ย</div>
-              <div style="font-size: 24px; font-weight: bold; color: #ff9800;">${averageScore}</div>
-            </div>
-          </div>
-          
-          ${comparisonText}
-          
-          ${score === topScore ? '<p style="font-size: 18px; color: #28a745; font-weight: bold; margin-top: 15px;">🎊 คุณทำคะแนนสูงสุด!</p>' : ''}
         </div>
       `;
     }
@@ -1608,5 +1497,5 @@
 
     initSDKs();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a79d3f126b4fdc4',t:'MTc2NDY2ODA2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a7a004413b5f900',t:'MTc2NDY2OTg3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
